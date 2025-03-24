@@ -1,4 +1,3 @@
-import React from "react";
 import {
   useSensor,
   useSensors,
@@ -145,7 +144,7 @@ const CreateQuiz = () => {
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
           {loading ? (
             <>
-              <Spinner size={14} color="#fff" />
+              <Spinner size={14} />
               Saving...
             </>
           ) : (

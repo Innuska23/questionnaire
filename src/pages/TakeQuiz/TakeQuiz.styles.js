@@ -75,7 +75,8 @@ const Result = styled.div`
   ul {
     list-style: none;
     padding: 0;
-    text-align: left;
+    margin-top: 2rem;
+    text-align: center;
   }
 
   li {

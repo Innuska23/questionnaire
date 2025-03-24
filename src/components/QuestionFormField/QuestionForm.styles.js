@@ -30,6 +30,7 @@ const TextArea = styled.textarea`
   border-radius: 4px;
   font-size: 16px;
   min-height: 100px;
+  resize: none;
 
   &:focus {
     outline: none;
