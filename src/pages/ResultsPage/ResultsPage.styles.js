@@ -6,7 +6,7 @@ const Container = styled.div`
   padding: 2rem;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow);
 
   h2 {
     margin-bottom: 1rem;
@@ -23,7 +23,7 @@ const Card = styled.div`
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  background-color: #f9f9f9;
+  background-color: var(--background-color);
 
   h4 {
     margin-top: 0;
@@ -38,7 +38,7 @@ const Card = styled.div`
 
   li {
     margin-bottom: 0.5rem;
-    color: #333;
+    color: var(--text-color);
   }
 `;
 

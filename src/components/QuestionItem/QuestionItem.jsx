@@ -1,6 +1,9 @@
 import React from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaGripVertical } from "react-icons/fa";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
+import QuestionFormField from "../QuestionFormField/QuestionFormField";
 import OptionList from "../OptionList/OptionList";
 
 import { S } from "./QuestionItem.styles";
@@ -14,7 +17,19 @@ const QuestionItem = ({
   onAddOption,
   onRemoveOption,
   onRemoveQuestion,
+  isDraggable = false,
 }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: question.id,
+      disabled: !isDraggable,
+    });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   const handleTextChange = (e) => {
     onQuestionChange(question.id, "text", e.target.value);
   };
@@ -25,8 +40,16 @@ const QuestionItem = ({
   };
 
   return (
-    <S.QuestionContainer>
+    <S.QuestionContainer
+      ref={isDraggable ? setNodeRef : null}
+      style={isDraggable ? style : {}}
+    >
       <S.QuestionHeader>
+        {isDraggable && (
+          <S.DragHandle {...attributes} {...listeners}>
+            <FaGripVertical />
+          </S.DragHandle>
+        )}
         <S.QuestionTitle>Question {index + 1}</S.QuestionTitle>
         <S.DeleteButton
           onClick={() => onRemoveQuestion(question.id)}
@@ -36,35 +59,34 @@ const QuestionItem = ({
         </S.DeleteButton>
       </S.QuestionHeader>
 
-      <S.FormGroup>
-        <S.Label>Question Text</S.Label>
-        <S.TextInput
-          value={question.text}
-          onChange={handleTextChange}
-          placeholder="Enter question text"
-          required
-        />
-      </S.FormGroup>
+      <QuestionFormField
+        label="Question Text"
+        value={question.text}
+        onChange={handleTextChange}
+        placeholder="Enter question text"
+        required={true}
+      />
 
-      <S.FormGroup>
-        <S.Label>Question Type</S.Label>
-        <S.Select value={question.type} onChange={handleTypeChange}>
-          <option value="text">Text</option>
-          <option value="single">Single Choice</option>
-          <option value="multiple">Multiple Choice</option>
-        </S.Select>
-      </S.FormGroup>
+      <QuestionFormField
+        type="select"
+        label="Question Type"
+        value={question.type}
+        onChange={handleTypeChange}
+        options={[
+          { value: "text", label: "Text" },
+          { value: "radio", label: "Single Choice" },
+          { value: "checkbox", label: "Multiple Choice" },
+        ]}
+      />
 
       {question.text.trim() &&
-        (question.type === "single" || question.type === "multiple") && (
+        (question.type === "radio" || question.type === "checkbox") && (
           <OptionList
             options={question.options}
-            questionIndex={index}
-            onOptionChange={(qIdx, optIdx, val) =>
-              onOptionChange(question.id, optIdx, val)
-            }
-            onAddOption={() => onAddOption(question.id)}
-            onRemoveOption={(optIdx) => onRemoveOption(question.id, optIdx)}
+            questionId={question.id}
+            onOptionChange={onOptionChange}
+            onAddOption={onAddOption}
+            onRemoveOption={onRemoveOption}
           />
         )}
     </S.QuestionContainer>

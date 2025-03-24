@@ -30,13 +30,13 @@ const OptionInput = styled.input`
 const RemoveBtn = styled.button`
   background: none;
   border: none;
-  color: #e74c3c;
+  color: var(--error-color);
   font-size: 1rem;
   cursor: pointer;
   padding: 0.4rem;
 
   &:hover {
-    color: #c0392b;
+    color: var(--error-color-focus);
   }
 `;
 

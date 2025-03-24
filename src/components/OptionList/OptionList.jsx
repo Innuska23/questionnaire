@@ -5,7 +5,7 @@ import { S } from "./OptionList.styles";
 
 const OptionList = ({
   options,
-  questionIndex,
+  questionId,
   onOptionChange,
   onAddOption,
   onRemoveOption,
@@ -17,13 +17,13 @@ const OptionList = ({
         <S.OptionItem key={i}>
           <S.OptionInput
             value={opt}
-            onChange={(e) => onOptionChange(questionIndex, i, e.target.value)}
+            onChange={(e) => onOptionChange(questionId, i, e.target.value)}
             placeholder={`Option ${i + 1}`}
             required
           />
           {options.length > 2 && (
             <S.RemoveBtn
-              onClick={() => onRemoveOption(i)}
+              onClick={() => onRemoveOption(questionId, i)}
               title="Remove option"
             >
               <FaTrash />
@@ -32,7 +32,7 @@ const OptionList = ({
         </S.OptionItem>
       ))}
 
-      <S.AddBtn type="button" onClick={onAddOption}>
+      <S.AddBtn type="button" onClick={() => onAddOption(questionId)}>
         <FaPlus /> Add Option
       </S.AddBtn>
     </S.OptionsWrapper>

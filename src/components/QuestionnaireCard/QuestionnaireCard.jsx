@@ -16,13 +16,25 @@ const QuestionnaireCard = ({ data, onDelete }) => {
         <span>{data.completions} completions</span>
       </S.Meta>
       <S.Actions>
-        <S.IconBtn onClick={() => navigate(`/take/${data._id}`)} title="Take">
+        <S.IconBtn
+          color="blue"
+          onClick={() => navigate(`/take/${data._id}`)}
+          title="Take"
+        >
           <FaPlay />
         </S.IconBtn>
-        <S.IconBtn onClick={() => navigate(`/edit/${data._id}`)} title="Edit">
+        <S.IconBtn
+          color="green"
+          onClick={() => navigate(`/edit/${data._id}`)}
+          title="Edit"
+        >
           <FaEdit />
         </S.IconBtn>
-        <S.IconBtn onClick={() => onDelete(data._id)} title="Delete">
+        <S.IconBtn
+          color="red"
+          onClick={() => onDelete(data._id)}
+          title="Delete"
+        >
           <FaTrash />
         </S.IconBtn>
       </S.Actions>

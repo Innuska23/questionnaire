@@ -1,63 +1,91 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-import { deleteQuestionnaire, getQuestionnaires } from "../../api/api";
 import QuestionnaireCard from "../../components/QuestionnaireCard/QuestionnaireCard";
+import Pagination from "../../components/Pagination/Pagination";
+import Spinner from "../../components/Spinner/Spinner";
+import { useQuestionnaires } from "../../hooks/useQuestionnaires";
 
 import { S } from "./Catalog.styles";
-import Pagination from "../../components/Pagination/Pagination";
 
 const Catalog = () => {
-  const [questionnaires, setQuestionnaires] = useState([]);
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
+  const {
+    questionnaires,
+    loading,
+    error,
+    sortBy,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    handleDelete,
+    handleSortChange,
+  } = useQuestionnaires();
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy]);
-
-  const fetchData = async () => {
-    try {
-      const data = await getQuestionnaires({ page: currentPage, sortBy });
-      setQuestionnaires(data.questionnaires);
-      setTotalPages(data.totalPages);
-    } catch (err) {
-      console.error(err);
-    }
+  const handleCreateNew = () => {
+    navigate("/create");
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Delete this questionnaire?")) {
-      await deleteQuestionnaire(id);
-      fetchData();
-    }
-  };
+  if (error) {
+    return (
+      <S.Wrapper>
+        <S.Header>
+          <h1>Catalog</h1>
+        </S.Header>
+        <div className="error-message">{error}</div>
+      </S.Wrapper>
+    );
+  }
 
   return (
     <S.Wrapper>
       <S.Header>
         <h1>Catalog</h1>
-        <S.SortSelect
-          onChange={(e) => setSortBy(e.target.value)}
-          value={sortBy}
-        >
-          <option value="name">Name</option>
-          <option value="questions">Questions</option>
-          <option value="completions">Completions</option>
-        </S.SortSelect>
+        <div>
+          <S.SortSelect
+            onChange={(e) => handleSortChange(e.target.value)}
+            value={sortBy}
+          >
+            <option value="createdAt">Newest</option>
+            <option value="name">Name</option>
+            <option value="questions">Questions</option>
+            <option value="completions">Completions</option>
+          </S.SortSelect>
+          <S.Button onClick={handleCreateNew}>Create New</S.Button>
+        </div>
       </S.Header>
-      <S.Grid>
-        {questionnaires.map((q) => (
-          <QuestionnaireCard key={q._id} data={q} onDelete={handleDelete} />
-        ))}
-      </S.Grid>
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
+
+      {loading ? (
+        <Spinner size={32} />
+      ) : (
+        <>
+          {questionnaires.length === 0 ? (
+            <S.EmptyState>
+              <p>No questionnaires found. Create your first one!</p>
+              <S.Button onClick={handleCreateNew}>
+                Create Questionnaire
+              </S.Button>
+            </S.EmptyState>
+          ) : (
+            <S.Grid>
+              {questionnaires.map((q) => (
+                <QuestionnaireCard
+                  key={q._id}
+                  data={q}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </S.Grid>
+          )}
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        </>
       )}
     </S.Wrapper>
   );

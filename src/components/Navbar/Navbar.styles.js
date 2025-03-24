@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Nav = styled.nav`
   background: white;
   padding: 1rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -21,7 +21,7 @@ export const Container = styled.div`
 export const Logo = styled(Link)`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
 `;
 
 export const Links = styled.div`
@@ -30,9 +30,14 @@ export const Links = styled.div`
 `;
 
 export const NavLink = styled(Link)`
-  color: #4a90e2;
-  font-weight: 500;
+  color: var(--primary-color);
+  font-weight: var(--font-weight-500);
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+
   &:hover {
-    color: #357abd;
+    color: var(--hover-color);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
   }
 `;

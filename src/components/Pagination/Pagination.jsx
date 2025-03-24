@@ -18,7 +18,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
   return (
     <S.PaginationContainer>
       <S.PaginationButton onClick={handlePrevPage} disabled={currentPage === 1}>
-        Previous
+        Prev
       </S.PaginationButton>
 
       <S.PageInfo>

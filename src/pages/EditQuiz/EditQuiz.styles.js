@@ -6,7 +6,7 @@ const Container = styled.div`
   padding: 2rem;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow);
 `;
 
 const Title = styled.h2`
@@ -26,7 +26,7 @@ const InputGroup = styled.div`
 
   label {
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: var(--font-weight-600);
     color: #444;
   }
 
@@ -46,7 +46,7 @@ const InputGroup = styled.div`
 
 const Button = styled.button`
   background-color: #f1f1f1;
-  color: #333;
+  color: var(--text-color);
   border: 1px dashed #aaa;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -61,25 +61,25 @@ const Button = styled.button`
 `;
 
 const Submit = styled.button`
-  background-color: #4a90e2;
+  background-color: var(--primary-color);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-600);
   cursor: pointer;
   border: none;
   align-self: flex-end;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #357abd;
+    background-color: var(--hover-color);
   }
 `;
 
 const Error = styled.p`
-  color: #e74c3c;
-  font-weight: 500;
+  color: var(--error-color);
+  font-weight: var(--font-weight-500);
   text-align: center;
 `;
 

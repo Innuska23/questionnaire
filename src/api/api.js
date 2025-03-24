@@ -9,7 +9,11 @@ export const api = axios.create({
   },
 });
 
-export const getQuestionnaires = async ({ page = 1, limit = 10, sortBy }) => {
+export const getQuestionnaires = async (
+  page = 1,
+  limit = 6,
+  sortBy = "createdAt"
+) => {
   const res = await api.get("/api/questionnaires", {
     params: { page, limit, sortBy },
   });

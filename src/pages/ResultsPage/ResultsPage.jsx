@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { S } from "./ResultsPage.styles";
 import {
   getQuestionnaireById,
   getResponsesByQuestionnaireId,
 } from "../../api/api";
+
+import { S } from "./ResultsPage.styles";
 
 const ResultsPage = () => {
   const { id } = useParams();

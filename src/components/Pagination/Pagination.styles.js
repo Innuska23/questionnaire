@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Pagination = styled.div`
+const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,7 +8,8 @@ const Pagination = styled.div`
 `;
 
 const PaginationButton = styled.button`
-  background-color: ${(props) => (props.disabled ? "#ccc" : "#4a90e2")};
+  background-color: ${({ disabled }) =>
+    disabled ? "#ccc" : "var(--primary-color)"};
   color: white;
   border: none;
   padding: 8px 15px;
@@ -16,17 +17,17 @@ const PaginationButton = styled.button`
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 
   &:hover:not(:disabled) {
-    background-color: #357abd;
+    background-color: var(--hover-color);
   }
 `;
 
 const PageInfo = styled.span`
   margin: 0 15px;
-  color: #666;
+  color: var(--secondary-color);
 `;
 
 export const S = {
-  Pagination,
+  PaginationContainer,
   PaginationButton,
   PageInfo,
 };

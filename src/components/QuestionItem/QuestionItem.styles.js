@@ -22,12 +22,22 @@ const QuestionTitle = styled.h4`
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  color: #e74c3c;
+  color: var(--error-color);
   font-size: 1.1rem;
   cursor: pointer;
 
   &:hover {
-    color: #c0392b;
+    color: var(--error-color-focus);
+  }
+`;
+
+const DragHandle = styled.div`
+  cursor: grab;
+  color: #888;
+  margin-right: 10px;
+
+  &:active {
+    cursor: grabbing;
   }
 `;
 
@@ -36,7 +46,7 @@ const FormGroup = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: 600;
+  font-weight: var(--font-weight-600);
   font-size: 1rem;
   display: block;
   margin-bottom: 0.5rem;
@@ -63,6 +73,7 @@ export const S = {
   QuestionHeader,
   QuestionTitle,
   DeleteButton,
+  DragHandle,
   FormGroup,
   Label,
   TextInput,

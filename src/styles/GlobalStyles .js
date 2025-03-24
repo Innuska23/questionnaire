@@ -1,6 +1,18 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+ :root {
+    --primary-color: #4a90e2;
+    --secondary-color: #666;
+    --hover-color: #357abd;
+    --text-color: #333;  
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --font-weight-500: 500;
+    --font-weight-600: 600;
+    --error-color: #e74c3c;
+    --error-color-focus: #c0392b;
+    --background-color: #f9f9f9;
+  }
   * {
     box-sizing: border-box;
     margin: 0;
@@ -20,5 +32,6 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     font-family: inherit;
+    cursor: pointer;
   }
 `;

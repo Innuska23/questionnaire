@@ -6,7 +6,7 @@ const Container = styled.div`
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow);
 
   h2 {
     text-align: center;
@@ -26,7 +26,7 @@ const Block = styled.div`
   gap: 0.5rem;
 
   label {
-    font-weight: 600;
+    font-weight: var(--font-weight-600);
     margin-bottom: 0.25rem;
   }
 
@@ -44,9 +44,9 @@ const Block = styled.div`
 `;
 
 const SubmitBtn = styled.button`
-  background-color: #4a90e2;
+  background-color: var(--primary-color);
   color: white;
-  font-weight: 600;
+  font-weight: var(--font-weight-600);
   font-size: 1rem;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -56,7 +56,7 @@ const SubmitBtn = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #357abd;
+    background-color: var(--hover-color);
   }
 `;
 
