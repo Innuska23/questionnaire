@@ -1,14 +1,12 @@
 import styled from "styled-components";
+import { FaSpinner } from "react-icons/fa";
 
-export const SpinnerContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-
-  svg {
-    animation: spin 1s linear infinite;
-  }
+export const SpinnerIcon = styled(FaSpinner)`
+  animation: spin 1s linear infinite;
+  color: ${(props) => props.color || "#000"};
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
 
   @keyframes spin {
     0% {

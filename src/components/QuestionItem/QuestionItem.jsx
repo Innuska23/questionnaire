@@ -19,6 +19,7 @@ const QuestionItem = ({
   onRemoveQuestion,
   isDraggable = false,
 }) => {
+  console.log("🚀 ~ question:", question);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: question.id,
@@ -31,6 +32,7 @@ const QuestionItem = ({
   };
 
   const handleTextChange = (e) => {
+    console.log("🚀 ~ handleTextChange ~ e:", e);
     onQuestionChange(question.id, "text", e.target.value);
   };
 
@@ -64,11 +66,13 @@ const QuestionItem = ({
         value={question.text}
         onChange={handleTextChange}
         placeholder="Enter question text"
+        name="Question Text"
         required={true}
       />
 
       <QuestionFormField
         type="select"
+        name="Question Type"
         label="Question Type"
         value={question.type}
         onChange={handleTypeChange}

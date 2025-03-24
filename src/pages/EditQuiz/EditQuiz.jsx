@@ -1,13 +1,19 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useSensor, useSensors, PointerSensor } from "@dnd-kit/core";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+  useSensor,
+  useSensors,
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  MouseSensor,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import ClipLoader from "react-spinners/ClipLoader";
 
+import Spinner from "../../components/Spinner/Spinner";
 import { useQuizForm } from "../../hooks/useQuizForm";
 import SortableQuestion from "../../components/SortableQuestion/SortableQuestion";
 
@@ -15,7 +21,13 @@ import { S } from "./EditQuiz.styles";
 
 const EditQuiz = () => {
   const { id } = useParams();
-  const sensors = useSensors(useSensor(PointerSensor));
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const keyboardSensor = useSensor(KeyboardSensor);
+  const sensors = useSensors(mouseSensor, keyboardSensor);
 
   const {
     name,
@@ -108,7 +120,8 @@ const EditQuiz = () => {
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
           {loading ? (
             <>
-              <ClipLoader size={14} color="#fff" /> Saving...
+              <Spinner size={14} color="#fff" />
+              Saving...
             </>
           ) : (
             "Save Quiz"

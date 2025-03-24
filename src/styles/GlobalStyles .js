@@ -23,6 +23,11 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'Segoe UI', sans-serif;
     background-color: #f4f6f8;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
   }
 
   a {

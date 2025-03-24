@@ -4,6 +4,10 @@ const Wrapper = styled.div`
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Header = styled.div`

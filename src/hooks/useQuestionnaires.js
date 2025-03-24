@@ -8,11 +8,24 @@ export const useQuestionnaires = (
   limit = 6
 ) => {
   const [questionnaires, setQuestionnaires] = useState([]);
-  const [sortBy, setSortBy] = useState(initialSortBy);
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [sortBy, setSortBy] = useState(() => {
+    return localStorage.getItem("sortBy") || initialSortBy;
+  });
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = localStorage.getItem("currentPage");
+    return savedPage ? Number(savedPage) : initialPage;
+  });
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    localStorage.setItem("sortBy", sortBy);
+  }, [sortBy]);
 
   const fetchData = useCallback(async () => {
     try {

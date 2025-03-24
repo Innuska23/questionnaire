@@ -1,3 +1,62 @@
+# Questionnaire App
+Web-based application for building and completing customizable questionnaires.
+Developed as a test task for ElifTech.
+
+## 🧠 Features
+### ✅ Base level — ✔️ implemented
+### ✅ Middle level — ✔️ implemented
+### ❌ Advanced level — not implemented
+
+## 📌 Base Level Includes
+### ✅ Catalog page with:
+
+Questionnaire name
+
+Description
+
+Amount of questions
+
+Amount of completions
+
+Actions: Edit / Run / Delete
+
+### ✅ Questionnaire builder with:
+
+Support for Text, Single choice (radio), Multiple choice (checkbox)
+
+Save to database
+
+### ✅ Interactive questionnaire page:
+
+Complete questionnaire
+
+Review answers after completion
+
+Timer (time spent)
+
+Save user responses to DB
+
+## 🔁 Middle Level Includes
+### ✅ Sorting catalog by:
+
+Name
+
+Number of questions
+
+Number of completions
+
+### ✅ Drag & Drop support in:
+
+Question reordering
+
+Answer options
+
+### ✅ Intermediate progress saved:
+
+User can refresh page and continue from the same place
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

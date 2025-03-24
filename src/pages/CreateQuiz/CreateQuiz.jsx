@@ -2,9 +2,10 @@ import React from "react";
 import {
   useSensor,
   useSensors,
-  PointerSensor,
   DndContext,
   closestCenter,
+  KeyboardSensor,
+  MouseSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -20,7 +21,13 @@ import Spinner from "../../components/Spinner/Spinner";
 import { S } from "./CreateQuiz.styles";
 
 const CreateQuiz = () => {
-  const sensors = useSensors(useSensor(PointerSensor));
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10,
+    },
+  });
+  const keyboardSensor = useSensor(KeyboardSensor);
+  const sensors = useSensors(mouseSensor, keyboardSensor);
 
   const {
     name,
@@ -71,6 +78,7 @@ const CreateQuiz = () => {
       >
         <QuestionFormField
           label="Quiz Name"
+          name="QCuiz Name"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -83,6 +91,7 @@ const CreateQuiz = () => {
         <QuestionFormField
           type="textarea"
           label="Description"
+          name="Description"
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
@@ -134,7 +143,14 @@ const CreateQuiz = () => {
         </S.Button>
 
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
-          {loading ? <Spinner size={16} /> : "Save Quiz"}
+          {loading ? (
+            <>
+              <Spinner size={14} color="#fff" />
+              Saving...
+            </>
+          ) : (
+            "Save Quiz"
+          )}
         </S.Submit>
 
         {error && <S.Error>{error}</S.Error>}
