@@ -42,6 +42,7 @@ const Grid = styled.div`
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-items: stretch;
 `;
 
 const EmptyState = styled.div`

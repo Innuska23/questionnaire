@@ -42,15 +42,7 @@ const Card = styled.div`
   }
 `;
 
-const Center = styled.div`
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.1rem;
-  color: #888;
-`;
-
 export const S = {
   Container,
   Card,
-  Center,
 };

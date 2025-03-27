@@ -11,6 +11,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
+import { motion, AnimatePresence } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useCreateQuizForm } from "../../hooks/useCreateQuizForm";
 import SortableQuestion from "../../components/SortableQuestion/SortableQuestion";
 import QuestionFormField from "../../components/QuestionFormField/QuestionFormField";
@@ -58,26 +62,46 @@ const CreateQuiz = () => {
     handleReorder(oldIndex, newIndex);
   };
 
+  const handleSave = async () => {
+    try {
+      await handleSubmit();
+      toast.success("Quiz saved!");
+    } catch (err) {
+      toast.error("Something went wrong!");
+    }
+  };
+
   return (
     <S.Container>
-      <S.Title>Create New Quiz</S.Title>
+      <ToastContainer />
+      <motion.div
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <S.Title>Create New Quiz</S.Title>
+      </motion.div>
 
       {loading && (
-        <div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
           <ProgressBar percent={progressPercent} />
           <p>Saving your quiz... {Math.round(progressPercent)}%</p>
-        </div>
+        </motion.div>
       )}
 
       <S.Form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          handleSave();
         }}
       >
         <QuestionFormField
           label="Quiz Name"
-          name="QCuiz Name"
+          name="Quiz Name"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -119,27 +143,42 @@ const CreateQuiz = () => {
                 items={questions.map((q) => q.id)}
                 strategy={verticalListSortingStrategy}
               >
-                {questions.map((q, i) => (
-                  <SortableQuestion
-                    key={q.id}
-                    question={q}
-                    index={i}
-                    onQuestionChange={handleQuestionChange}
-                    onTypeChange={handleTypeChange}
-                    onOptionChange={handleOptionChange}
-                    onAddOption={handleAddOption}
-                    onRemoveOption={handleRemoveOption}
-                    onRemoveQuestion={handleRemoveQuestion}
-                  />
-                ))}
+                <AnimatePresence>
+                  {questions.map((q, i) => (
+                    <motion.div
+                      key={q.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <SortableQuestion
+                        question={q}
+                        index={i}
+                        onQuestionChange={handleQuestionChange}
+                        onTypeChange={handleTypeChange}
+                        onOptionChange={handleOptionChange}
+                        onAddOption={handleAddOption}
+                        onRemoveOption={handleRemoveOption}
+                        onRemoveQuestion={handleRemoveQuestion}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </SortableContext>
             </DndContext>
           )}
         </S.QuestionsContainer>
 
-        <S.Button type="button" onClick={handleAddQuestion}>
-          Add Question
-        </S.Button>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <S.Button type="button" onClick={handleAddQuestion}>
+            Add Question
+          </S.Button>
+        </motion.div>
 
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
           {loading ? (

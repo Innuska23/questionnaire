@@ -119,7 +119,7 @@ const Submit = styled.button`
   }
 
   &:disabled {
-    background-color: #aaa;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 `;

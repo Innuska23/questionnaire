@@ -47,15 +47,14 @@ export const useQuestionnaires = (
   }, [fetchData]);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Delete this questionnaire?")) {
-      try {
-        setLoading(true);
-        await deleteQuestionnaire(id);
-        await fetchData();
-      } catch (err) {
-        setError(err.message || "Failed to delete questionnaire");
-        setLoading(false);
-      }
+    try {
+      setLoading(true);
+      await deleteQuestionnaire(id);
+      await fetchData();
+    } catch (err) {
+      setError(err.message || "Failed to delete questionnaire");
+    } finally {
+      setLoading(false);
     }
   };
 

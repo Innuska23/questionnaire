@@ -7,6 +7,8 @@ const Card = styled.div`
   box-shadow: 0 2px 8px var(--box-shadow);
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 250px;
 `;
 
 const Title = styled.h3`
@@ -17,6 +19,11 @@ const Description = styled.p`
   color: var(--secondary-color);
   font-size: 0.95rem;
   margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Meta = styled.div`

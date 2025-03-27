@@ -1,5 +1,5 @@
-import React from "react";
 import { useParams } from "react-router-dom";
+
 import {
   useSensor,
   useSensors,
@@ -13,6 +13,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
+import { motion, AnimatePresence } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Spinner from "../../components/Spinner/Spinner";
 import { useQuizForm } from "../../hooks/useQuizForm";
 import SortableQuestion from "../../components/SortableQuestion/SortableQuestion";
@@ -21,6 +25,7 @@ import { S } from "./EditQuiz.styles";
 
 const EditQuiz = () => {
   const { id } = useParams();
+
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10,
@@ -55,13 +60,31 @@ const EditQuiz = () => {
     handleReorder(oldIndex, newIndex);
   };
 
+  const handleSave = async () => {
+    try {
+      await handleSubmit();
+      toast.success("Quiz updated!");
+    } catch (err) {
+      toast.error("Update failed.");
+    }
+  };
+
   return (
     <S.Container>
-      <S.Title>Edit Quiz</S.Title>
+      <ToastContainer />
+
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <S.Title>Edit Quiz</S.Title>
+      </motion.div>
+
       <S.Form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          handleSave();
         }}
       >
         <S.InputGroup>
@@ -90,32 +113,47 @@ const EditQuiz = () => {
             items={questions.map((q) => q.id)}
             strategy={verticalListSortingStrategy}
           >
-            {questions.map((q, i) => (
-              <SortableQuestion
-                key={q.id}
-                question={q}
-                index={i}
-                onQuestionChange={(id, field, value) =>
-                  handleUpdateQuestion(id, { [field]: value })
-                }
-                onTypeChange={(id, newType) =>
-                  handleUpdateQuestion(id, {
-                    type: newType,
-                    options: newType === "text" ? [] : ["", ""],
-                  })
-                }
-                onOptionChange={handleOptionChange}
-                onAddOption={handleAddOption}
-                onRemoveOption={handleRemoveOption}
-                onRemoveQuestion={handleRemoveQuestion}
-              />
-            ))}
+            <AnimatePresence>
+              {questions.map((q, i) => (
+                <motion.div
+                  key={q.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <SortableQuestion
+                    question={q}
+                    index={i}
+                    onQuestionChange={(id, field, value) =>
+                      handleUpdateQuestion(id, { [field]: value })
+                    }
+                    onTypeChange={(id, newType) =>
+                      handleUpdateQuestion(id, {
+                        type: newType,
+                        options: newType === "text" ? [] : ["", ""],
+                      })
+                    }
+                    onOptionChange={handleOptionChange}
+                    onAddOption={handleAddOption}
+                    onRemoveOption={handleRemoveOption}
+                    onRemoveQuestion={handleRemoveQuestion}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </SortableContext>
         </DndContext>
 
-        <S.Button type="button" onClick={handleAddQuestion}>
-          Add Question
-        </S.Button>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <S.Button type="button" onClick={handleAddQuestion}>
+            Add Question
+          </S.Button>
+        </motion.div>
 
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
           {loading ? (

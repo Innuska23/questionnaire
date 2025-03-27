@@ -1,17 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { getQuestionnaireById, submitResponse } from "../../api/api";
-
 import { S } from "./TakeQuiz.styles";
 
 const TakeQuiz = () => {
   const { id } = useParams();
   const [questionnaire, setQuestionnaire] = useState(null);
-  const [answers, setAnswers] = useState({});
   const [startTime, setStartTime] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [duration, setDuration] = useState(0);
+
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { isValid },
+  } = useForm({
+    defaultValues: {},
+    mode: "onChange",
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -21,28 +34,16 @@ const TakeQuiz = () => {
 
       const saved = localStorage.getItem(`quiz-${id}`);
       if (saved) {
-        setAnswers(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        Object.keys(parsed).forEach((key) => {
+          setValue(key, parsed[key]);
+        });
       }
     };
     loadData();
-  }, [id]);
+  }, [id, setValue]);
 
-  const handleChange = (qid, value) => {
-    const updated = { ...answers, [qid]: value };
-    setAnswers(updated);
-    localStorage.setItem(`quiz-${id}`, JSON.stringify(updated));
-  };
-
-  const handleCheckbox = (qid, option) => {
-    const prev = answers[qid] || [];
-    const updated = prev.includes(option)
-      ? prev.filter((o) => o !== option)
-      : [...prev, option];
-    handleChange(qid, updated);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (formData) => {
     const endTime = Date.now();
     const timeTaken = Math.floor((endTime - startTime) / 1000);
 
@@ -51,74 +52,145 @@ const TakeQuiz = () => {
       completionTime: timeTaken,
       answers: questionnaire.questions.map((q) => ({
         questionId: q._id,
-        answer: answers[q._id] || (q.type.includes("choice") ? [] : ""),
+        answer: formData[q._id] || (q.type.includes("choice") ? [] : ""),
       })),
     };
 
-    await submitResponse(payload);
-    localStorage.removeItem(`quiz-${id}`);
-    setSubmitted(true);
-    setDuration(timeTaken);
+    try {
+      await submitResponse(payload);
+      localStorage.removeItem(`quiz-${id}`);
+      toast.success("Submission successful!");
+      setSubmitted(true);
+      setDuration(timeTaken);
+    } catch (err) {
+      toast.error("Failed to submit!");
+    }
+  };
+
+  const handleSaveToLocal = (qid, value) => {
+    const current = getValues();
+    const updated = { ...current, [qid]: value };
+    localStorage.setItem(`quiz-${id}`, JSON.stringify(updated));
+    setValue(qid, value, { shouldValidate: true });
   };
 
   if (!questionnaire) return <p>Loading...</p>;
-  if (submitted)
+
+  if (submitted) {
     return (
-      <S.Result>
+      <S.Result
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         <h2>Thank you!</h2>
         <p>You finished in {duration} seconds.</p>
         <h3>Your Answers:</h3>
         <ul>
           {questionnaire.questions.map((q) => (
             <li key={q._id}>
-              <strong>{q.text}:</strong> {JSON.stringify(answers[q._id])}
+              <strong>{q.text}:</strong> {JSON.stringify(getValues()[q._id])}
             </li>
           ))}
         </ul>
       </S.Result>
     );
+  }
 
   return (
     <S.Container>
+      <ToastContainer />
       <h2>{questionnaire.name}</h2>
-      <form onSubmit={handleSubmit}>
-        {questionnaire.questions.map((q) => (
-          <S.Block key={q._id}>
-            <label>{q.text}</label>
-            {q.type === "text" && (
-              <input
-                type="text"
-                value={answers[q._id] || ""}
-                onChange={(e) => handleChange(q._id, e.target.value)}
-              />
-            )}
-            {q.type === "single-choice" &&
-              q.options.map((opt) => (
-                <div key={opt.text}>
-                  <input
-                    type="radio"
-                    name={q._id}
-                    checked={answers[q._id] === opt.text}
-                    onChange={() => handleChange(q._id, opt.text)}
-                  />{" "}
-                  {opt.text}
-                </div>
-              ))}
-            {q.type === "multiple-choice" &&
-              q.options.map((opt) => (
-                <div key={opt.text}>
-                  <input
-                    type="checkbox"
-                    checked={(answers[q._id] || []).includes(opt.text)}
-                    onChange={() => handleCheckbox(q._id, opt.text)}
-                  />{" "}
-                  {opt.text}
-                </div>
-              ))}
-          </S.Block>
-        ))}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <AnimatePresence>
+          {questionnaire.questions.map((q) => (
+            <motion.div
+              key={q._id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <S.Block>
+                <label>{q.text}</label>
 
-        <S.SubmitBtn type="submit">Submit</S.SubmitBtn>
+                <Controller
+                  control={control}
+                  name={q._id}
+                  rules={{
+                    required: q.type !== "multiple-choice",
+                    validate:
+                      q.type === "multiple-choice"
+                        ? (val) =>
+                            (Array.isArray(val) && val.length > 0) ||
+                            "Select at least one"
+                        : undefined,
+                  }}
+                  render={({ field }) => {
+                    switch (q.type) {
+                      case "text":
+                        return (
+                          <input
+                            type="text"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleSaveToLocal(q._id, e.target.value);
+                            }}
+                          />
+                        );
+
+                      case "single-choice":
+                        return q.options.map((opt) => (
+                          <div key={opt.text}>
+                            <input
+                              type="radio"
+                              name={q._id}
+                              checked={field.value === opt.text}
+                              onChange={() => {
+                                field.onChange(opt.text);
+                                handleSaveToLocal(q._id, opt.text);
+                              }}
+                            />
+                            {opt.text}
+                          </div>
+                        ));
+
+                      case "multiple-choice":
+                        const val = Array.isArray(field.value)
+                          ? field.value
+                          : [];
+                        const toggle = (option) => {
+                          const updated = val.includes(option)
+                            ? val.filter((o) => o !== option)
+                            : [...val, option];
+                          field.onChange(updated);
+                          handleSaveToLocal(q._id, updated);
+                        };
+                        return q.options.map((opt) => (
+                          <div key={opt.text}>
+                            <input
+                              type="checkbox"
+                              checked={val.includes(opt.text)}
+                              onChange={() => toggle(opt.text)}
+                            />
+                            {opt.text}
+                          </div>
+                        ));
+
+                      default:
+                        return null;
+                    }
+                  }}
+                />
+              </S.Block>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        <S.SubmitBtn type="submit" disabled={!isValid}>
+          Submit
+        </S.SubmitBtn>
       </form>
     </S.Container>
   );

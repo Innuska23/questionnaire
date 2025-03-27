@@ -58,6 +58,11 @@ const SubmitBtn = styled.button`
   &:hover {
     background-color: var(--hover-color);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const Result = styled.div`

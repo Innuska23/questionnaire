@@ -1,5 +1,3 @@
-import React from "react";
-
 import { S } from "./QuestionForm.styles";
 
 const QuestionFormField = ({

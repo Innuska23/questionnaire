@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTrash, FaGripVertical } from "react-icons/fa";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -19,7 +18,6 @@ const QuestionItem = ({
   onRemoveQuestion,
   isDraggable = false,
 }) => {
-  console.log("🚀 ~ question:", question);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: question.id,
@@ -32,7 +30,6 @@ const QuestionItem = ({
   };
 
   const handleTextChange = (e) => {
-    console.log("🚀 ~ handleTextChange ~ e:", e);
     onQuestionChange(question.id, "text", e.target.value);
   };
 
