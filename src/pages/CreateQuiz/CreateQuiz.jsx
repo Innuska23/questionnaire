@@ -3,7 +3,6 @@ import {
   useSensors,
   DndContext,
   closestCenter,
-  KeyboardSensor,
   MouseSensor,
 } from "@dnd-kit/core";
 import {
@@ -11,7 +10,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,8 +27,8 @@ const CreateQuiz = () => {
       distance: 10,
     },
   });
-  const keyboardSensor = useSensor(KeyboardSensor);
-  const sensors = useSensors(mouseSensor, keyboardSensor);
+
+  const sensors = useSensors(mouseSensor);
 
   const {
     name,
@@ -74,23 +72,13 @@ const CreateQuiz = () => {
   return (
     <S.Container>
       <ToastContainer />
-      <motion.div
-        initial={{ opacity: 0, y: -15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <S.Title>Create New Quiz</S.Title>
-      </motion.div>
+      <S.Title>Create New Quiz</S.Title>
 
       {loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
+        <>
           <ProgressBar percent={progressPercent} />
           <p>Saving your quiz... {Math.round(progressPercent)}%</p>
-        </motion.div>
+        </>
       )}
 
       <S.Form
@@ -143,42 +131,27 @@ const CreateQuiz = () => {
                 items={questions.map((q) => q.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <AnimatePresence>
-                  {questions.map((q, i) => (
-                    <motion.div
-                      key={q.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <SortableQuestion
-                        question={q}
-                        index={i}
-                        onQuestionChange={handleQuestionChange}
-                        onTypeChange={handleTypeChange}
-                        onOptionChange={handleOptionChange}
-                        onAddOption={handleAddOption}
-                        onRemoveOption={handleRemoveOption}
-                        onRemoveQuestion={handleRemoveQuestion}
-                      />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                {questions.map((q, i) => (
+                  <SortableQuestion
+                    key={q.id}
+                    question={q}
+                    index={i}
+                    onQuestionChange={handleQuestionChange}
+                    onTypeChange={handleTypeChange}
+                    onOptionChange={handleOptionChange}
+                    onAddOption={handleAddOption}
+                    onRemoveOption={handleRemoveOption}
+                    onRemoveQuestion={handleRemoveQuestion}
+                  />
+                ))}
               </SortableContext>
             </DndContext>
           )}
         </S.QuestionsContainer>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <S.Button type="button" onClick={handleAddQuestion}>
-            Add Question
-          </S.Button>
-        </motion.div>
+        <S.Button type="button" onClick={handleAddQuestion}>
+          Add Question
+        </S.Button>
 
         <S.Submit type="submit" disabled={questions.length === 0 || loading}>
           {loading ? (

@@ -1,7 +1,4 @@
 import { FaTrash, FaGripVertical } from "react-icons/fa";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-
 import QuestionFormField from "../QuestionFormField/QuestionFormField";
 import OptionList from "../OptionList/OptionList";
 
@@ -17,18 +14,10 @@ const QuestionItem = ({
   onRemoveOption,
   onRemoveQuestion,
   isDraggable = false,
+  dragHandleProps = {},
+  nodeRef = null,
+  style = {},
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: question.id,
-      disabled: !isDraggable,
-    });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
   const handleTextChange = (e) => {
     onQuestionChange(question.id, "text", e.target.value);
   };
@@ -40,15 +29,19 @@ const QuestionItem = ({
 
   return (
     <S.QuestionContainer
-      ref={isDraggable ? setNodeRef : null}
-      style={isDraggable ? style : {}}
+      ref={isDraggable ? nodeRef : undefined}
+      style={isDraggable ? style : undefined}
     >
       <S.QuestionHeader>
         {isDraggable && (
-          <S.DragHandle {...attributes} {...listeners}>
+          <S.DragHandle
+            {...dragHandleProps.attributes}
+            {...dragHandleProps.listeners}
+          >
             <FaGripVertical />
           </S.DragHandle>
         )}
+
         <S.QuestionTitle>Question {index + 1}</S.QuestionTitle>
         <S.DeleteButton
           onClick={() => onRemoveQuestion(question.id)}
@@ -64,7 +57,7 @@ const QuestionItem = ({
         onChange={handleTextChange}
         placeholder="Enter question text"
         name="Question Text"
-        required={true}
+        required
       />
 
       <QuestionFormField

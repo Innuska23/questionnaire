@@ -1,6 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
 import QuestionItem from "../QuestionItem/QuestionItem";
 
 const SortableQuestion = ({ question, index, ...handlers }) => {
@@ -15,9 +14,20 @@ const SortableQuestion = ({ question, index, ...handlers }) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <QuestionItem question={question} index={index} {...handlers} />
-    </div>
+    <QuestionItem
+      question={question}
+      index={index}
+      onQuestionChange={handlers.onQuestionChange}
+      onTypeChange={handlers.onTypeChange}
+      onOptionChange={handlers.onOptionChange}
+      onAddOption={handlers.onAddOption}
+      onRemoveOption={handlers.onRemoveOption}
+      onRemoveQuestion={handlers.onRemoveQuestion}
+      isDraggable
+      dragHandleProps={{ attributes, listeners }}
+      nodeRef={setNodeRef}
+      style={style}
+    />
   );
 };
 
