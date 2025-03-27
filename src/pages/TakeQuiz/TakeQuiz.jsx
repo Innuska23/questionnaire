@@ -103,7 +103,7 @@ const TakeQuiz = () => {
       <h2>{questionnaire.name}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <AnimatePresence>
-          {questionnaire.questions.map((q) => (
+          {questionnaire.questions.map((q, qIndex) => (
             <motion.div
               key={q._id}
               initial={{ opacity: 0, y: 10 }}
@@ -141,20 +141,25 @@ const TakeQuiz = () => {
                         );
 
                       case "single-choice":
-                        return q.options.map((opt) => (
-                          <div key={opt.text}>
-                            <input
-                              type="radio"
-                              name={q._id}
-                              checked={field.value === opt.text}
-                              onChange={() => {
-                                field.onChange(opt.text);
-                                handleSaveToLocal(q._id, opt.text);
-                              }}
-                            />
-                            {opt.text}
-                          </div>
-                        ));
+                        return (
+                          <>
+                            {q.options.map((opt, i) => (
+                              <div key={`${q._id}-radio-${i}`}>
+                                <input
+                                  type="radio"
+                                  name={q._id}
+                                  value={opt.text}
+                                  checked={field.value === opt.text}
+                                  onChange={() => {
+                                    field.onChange(opt.text);
+                                    handleSaveToLocal(q._id, opt.text);
+                                  }}
+                                />
+                                {opt.text}
+                              </div>
+                            ))}
+                          </>
+                        );
 
                       case "multiple-choice":
                         const val = Array.isArray(field.value)
@@ -167,16 +172,22 @@ const TakeQuiz = () => {
                           field.onChange(updated);
                           handleSaveToLocal(q._id, updated);
                         };
-                        return q.options.map((opt) => (
-                          <div key={opt.text}>
-                            <input
-                              type="checkbox"
-                              checked={val.includes(opt.text)}
-                              onChange={() => toggle(opt.text)}
-                            />
-                            {opt.text}
-                          </div>
-                        ));
+                        return (
+                          <>
+                            {q.options.map((opt, i) => (
+                              <div key={`${q._id}-check-${i}`}>
+                                <input
+                                  type="checkbox"
+                                  name={`${q._id}-${opt.text}`}
+                                  value={opt.text}
+                                  checked={val.includes(opt.text)}
+                                  onChange={() => toggle(opt.text)}
+                                />
+                                {opt.text}
+                              </div>
+                            ))}
+                          </>
+                        );
 
                       default:
                         return null;
