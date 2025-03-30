@@ -9,6 +9,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import Spinner from "../../components/Spinner/Spinner";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 import { useQuestionnaires } from "../../hooks/useQuestionnaires";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 
 import { S } from "./Catalog.styles";
 
@@ -79,7 +80,7 @@ const Catalog = () => {
       {loading ? (
         <Spinner size={32} />
       ) : error ? (
-        <div className="error-message">{error}</div>
+        <ErrorMessage message={error} />
       ) : questionnaires.length === 0 ? (
         <S.EmptyState>
           <p>No questionnaires found. Create your first one!</p>

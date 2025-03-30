@@ -39,4 +39,18 @@ export const GlobalStyles = createGlobalStyle`
     font-family: inherit;
     cursor: pointer;
   }
+
+  .error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--error-color);
+    font-size: 18px;
+    font-weight: var(--font-weight-600);
+    text-align: center;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 80%;
+  }
 `;

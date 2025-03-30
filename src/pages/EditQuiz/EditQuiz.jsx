@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "../../components/Spinner/Spinner";
 import { useQuizForm } from "../../hooks/useQuizForm";
 import SortableQuestion from "../../components/SortableQuestion/SortableQuestion";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 
 import { S } from "./EditQuiz.styles";
 
@@ -166,7 +167,7 @@ const EditQuiz = () => {
           )}
         </S.Submit>
 
-        {error && <S.Error>{error}</S.Error>}
+        {error && <ErrorMessage message={error} />}
       </S.Form>
     </S.Container>
   );

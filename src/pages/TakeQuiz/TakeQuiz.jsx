@@ -6,6 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { getQuestionnaireById, submitResponse } from "../../api/api";
+import Spinner from "../../components/Spinner/Spinner";
+
 import { S } from "./TakeQuiz.styles";
 
 const TakeQuiz = () => {
@@ -74,7 +76,7 @@ const TakeQuiz = () => {
     setValue(qid, value, { shouldValidate: true });
   };
 
-  if (!questionnaire) return <p>Loading...</p>;
+  if (!questionnaire) return <Spinner />;
 
   if (submitted) {
     return (

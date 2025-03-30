@@ -20,6 +20,7 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Spinner from "../../components/Spinner/Spinner";
 
 import { S } from "./CreateQuiz.styles";
+import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 
 const CreateQuiz = () => {
   const mouseSensor = useSensor(MouseSensor, {
@@ -164,7 +165,7 @@ const CreateQuiz = () => {
           )}
         </S.Submit>
 
-        {error && <S.Error>{error}</S.Error>}
+        {error && <ErrorMessage message={error} />}
       </S.Form>
     </S.Container>
   );
