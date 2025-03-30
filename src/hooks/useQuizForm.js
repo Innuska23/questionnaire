@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import { getQuestionnaireById, updateQuestionnaire } from "../api/api";
 import { convertBackendType, convertFrontendType } from "../utils/questionType";
-import Spinner from "../components/Spinner/Spinner";
 
 export const useQuizForm = (id) => {
   const navigate = useNavigate();
@@ -127,8 +126,6 @@ export const useQuizForm = (id) => {
       setLoading(false);
     }
   };
-
-    if (loading) return <Spinner />;
 
   return {
     name,

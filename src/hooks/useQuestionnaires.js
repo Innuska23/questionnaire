@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { getQuestionnaires, deleteQuestionnaire } from "../api/api";
-import Spinner from "../components/Spinner/Spinner";
 
 export const useQuestionnaires = (
   initialSortBy = "createdAt",
@@ -64,7 +63,6 @@ export const useQuestionnaires = (
     setCurrentPage(1);
   };
 
-  if (loading) return <Spinner />;
 
   return {
     questionnaires,
